@@ -81,48 +81,48 @@ void BSOS_DataWrite(int address, byte data) {
   
   // Set data pins to output
   // Make pins 5-7 output (and pin 3 for R/W)
-  DDRD = DDRD | 0xE8;
+  DDR_D = DDR_D | 0xE8;
   // Make pins 8-12 output
-  DDRB = DDRB | 0x1F;
+  DDR_B = DDR_B | 0x1F;
 
   // Set R/W to LOW
-  PORTD = (PORTD & 0xF7);
+  PORT_D = (PORT_D & 0xF7);
 
   // Put data on pins
   // Put lower three bits on 5-7
-  PORTD = (PORTD&0x1F) | ((data&0x07)<<5);
+  PORT_D = (PORT_D&0x1F) | ((data&0x07)<<5);
   // Put upper five bits on 8-12
-  PORTB = (PORTB&0xE0) | (data>>3);
+  PORT_B = (PORT_B&0xE0) | (data>>3);
 
   // Set up address lines
-  PORTC = (PORTC & 0xE0) | address;
+  PORT_C = (PORT_C & 0xE0) | address;
 
   // Wait for a falling edge of the clock
-  while((PIND & 0x10));
+  while((PIN_D & 0x10));
 
   // Pulse VMA over one clock cycle
   // Set VMA ON
-  PORTC = PORTC | 0x20;
+  PORT_C = PORT_C | 0x20;
   
   // Wait while clock is low
-  while(!(PIND & 0x10));
+  while(!(PIN_D & 0x10));
   // Wait while clock is high
-// Doesn't seem to help --  while((PIND & 0x10));
+// Doesn't seem to help --  while((PIN_D & 0x10));
 
   // Set VMA OFF
-  PORTC = PORTC & 0xDF;
+  PORT_C = PORT_C & 0xDF;
 
   // Unset address lines
-  PORTC = PORTC & 0xE0;
+  PORT_C = PORT_C & 0xE0;
   
   // Set R/W back to HIGH
-  PORTD = (PORTD | 0x08);
+  PORT_D = (PORT_D | 0x08);
 
   // Set data pins to input
   // Make pins 5-7 input
-  DDRD = DDRD & 0x1F;
+  DDR_D = DDR_D & 0x1F;
   // Make pins 8-12 input
-  DDRB = DDRB & 0xE0;
+  DDR_B = DDR_B & 0xE0;
 }
 
 
@@ -131,40 +131,40 @@ byte BSOS_DataRead(int address) {
   
   // Set data pins to input
   // Make pins 5-7 input
-  DDRD = DDRD & 0x1F;
+  DDR_D = DDR_D & 0x1F;
   // Make pins 8-12 input
-  DDRB = DDRB & 0xE0;
+  DDR_B = DDR_B & 0xE0;
 
   // Set R/W to HIGH
-  DDRD = DDRD | 0x08;
-  PORTD = (PORTD | 0x08);
+  DDR_D = DDR_D | 0x08;
+  PORT_D = (PORT_D | 0x08);
 
   // Set up address lines
-  PORTC = (PORTC & 0xE0) | address;
+  PORT_C = (PORT_C & 0xE0) | address;
 
   // Wait for a falling edge of the clock
-  while((PIND & 0x10));
+  while((PIN_D & 0x10));
 
   // Pulse VMA over one clock cycle
   // Set VMA ON
-  PORTC = PORTC | 0x20;
+  PORT_C = PORT_C | 0x20;
   
   // Wait while clock is low
-  while(!(PIND & 0x10));
+  while(!(PIN_D & 0x10));
 
-  byte inputData = (PIND>>5) | (PINB<<3);
+  byte inputData = (PIN_D>>5) | (PIN_B<<3);
 
   // Set VMA OFF
-  PORTC = PORTC & 0xDF;
+  PORT_C = PORT_C & 0xDF;
 
   // Wait for a falling edge of the clock
-// Doesn't seem to help  while((PIND & 0x10));
+// Doesn't seem to help  while((PIN_D & 0x10));
 
   // Set R/W to LOW
-  PORTD = (PORTD & 0xF7);
+  PORT_D = (PORT_D & 0xF7);
 
   // Clear address lines
-  PORTC = (PORTC & 0xE0);
+  PORT_C = (PORT_C & 0xE0);
 
   return inputData;
 }
@@ -172,10 +172,10 @@ byte BSOS_DataRead(int address) {
 
 void WaitOneClockCycle() {
   // Wait while clock is low
-  while(!(PIND & 0x10));
+  while(!(PIN_D & 0x10));
 
   // Wait for a falling edge of the clock
-  while((PIND & 0x10));
+  while((PIN_D & 0x10));
 }
 
 
@@ -880,7 +880,7 @@ void BSOS_InitializeMPU() {
   // Arduino A4 = MPU A7
   // Arduino A5 = MPU VMA
   // Set up the address lines A0-A7 as output
-  DDRC = DDRC | 0x3F;
+  DDR_C = DDR_C | 0x3F;
 
   // Set up A6 as output
   pinMode(A6, OUTPUT); // /HLT
@@ -892,11 +892,11 @@ void BSOS_InitializeMPU() {
   // Arduino 6 = D1
   // Arduino 7 = D3
   // Set up control lines & data lines
-  DDRD = DDRD & 0xEB;
-  DDRD = DDRD | 0xE8;
+  DDR_D = DDR_D & 0xEB;
+  DDR_D = DDR_D | 0xE8;
 
-  digitalWrite(3, HIGH);  // Set R/W line high (Read)
-  digitalWrite(A5, LOW);  // Set VMA line LOW
+  digitalWrite(PIN_RW, HIGH);  // Set R/W line high (Read)
+  digitalWrite(PIN_VMA, LOW);  // Set VMA line LOW
   digitalWrite(A6, HIGH); // Set
 
   pinMode(2, INPUT);

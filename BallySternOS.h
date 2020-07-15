@@ -77,6 +77,31 @@ struct PlayfieldAndCabinetSwitch {
 // PIA @ U11 = A4, A7, !A9, !A12      
 // PIA @ U10 = A3, A7, !A9, !A12
 
+// Uncomment for Arduino Mega
+#define DDR_B DDRB
+#define PORT_B PORTB
+#define PIN_B PINB
+#define DDR_C DDRC
+#define PORT_C PORTC
+#define PIN_C PINC
+#define DDR_D DDRL
+#define PORT_D PORTL
+#define PIN_D PINL
+#define PIN_VMA 32
+#define PIN_RW 46
+
+// Uncomment for Arduino Nano
+//#define DDR_B DDRB
+//#define PORT_B PORTB
+//#define PIN_B PINB
+//#define DDR_C DDRC
+//#define PORT_C PORTC
+//#define PIN_C PINC
+//#define DDR_D DDRD
+//#define PORT_D PORTD
+//#define PIN_D PIND
+//#define PIN_VMA A5
+//#define PIN_RW 3
 
 
 
@@ -90,10 +115,10 @@ struct PlayfieldAndCabinetSwitch {
 // needed to get a delay of 80 us
 // So, set it to (0.000080) / (1/Clock Frequency)
 // Assuming Frequency = 500kHz,  40 = (0.000080) / (1/500000)
-#define BSOS_NUM_SWITCH_LOOPS 70
+#define BSOS_NUM_SWITCH_LOOPS 42
 // 60 us
 // So, set this to (0.000060) / (1/Clock Frequency)
-#define BSOS_NUM_LAMP_LOOPS   30
+#define BSOS_NUM_LAMP_LOOPS   31
 
 // Fast boards might need a slower lamp strobe
 #define BSOS_SLOW_DOWN_LAMP_STROBE  0

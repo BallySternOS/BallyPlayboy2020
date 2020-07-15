@@ -54,11 +54,11 @@ void setup() {
   // CPU is running
   // Set data pins to input
   // Make pins 2-7 input
-  DDRD = DDRD & 0x03;
+  DDR_D = DDR_D & 0x03;
   // Make pins 8-13 input
-  DDRB = DDRB & 0xC0;
+  DDR_B = DDR_B & 0xC0;
   // Set up the address lines A0-A5 as input (for now)
-  DDRC = DDRC & 0xC0;
+  DDR_C = DDR_C & 0xC0;
 
   unsigned long startTime = millis();
   boolean sawHigh = false;
@@ -66,7 +66,7 @@ void setup() {
   // for three seconds, look for activity on the VMA line (A5)
   // If we see anything, then the MPU is active so we shouldn't run
   while ((millis()-startTime)<1200) {
-    if (digitalRead(A5)) sawHigh = true;
+    if (digitalRead(PIN_VMA)) sawHigh = true;
     else sawLow = true;
   }
   // If we saw both a high and low signal, then someone is toggling the 
